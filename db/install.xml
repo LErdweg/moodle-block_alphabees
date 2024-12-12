@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/alphabees/db" VERSION="2023100500" COMMENT="Table for storing Alphabees plugin settings">
+<XMLDB PATH="blocks/alphabees/db" VERSION="2023100500" COMMENT="Database schema for Alphabees AI Tutor block settings">
     <TABLES>
         <!-- Define the table block_alphabees_settings -->
         <TABLE NAME="block_alphabees_settings" COMMENT="Settings for Alphabees AI Tutor plugin">
             <FIELDS>
                 <!-- Define the fields within the table -->
-                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary ID" />
-                <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="ID of the block instance" />
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" COMMENT="Primary key" />
+                <FIELD NAME="instanceid" TYPE="int" LENGTH="10" NOTNULL="true" COMMENT="Block instance ID" />
                 <FIELD NAME="apikey" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="API key for external service" />
                 <FIELD NAME="botid" TYPE="char" LENGTH="255" NOTNULL="true" COMMENT="Selected bot ID" />
                 <FIELD NAME="primary_color" TYPE="char" LENGTH="7" NOTNULL="true" COMMENT="Primary color for the chat widget (hex)" />
@@ -16,7 +16,7 @@
             <KEYS>
                 <!-- Define keys -->
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" />
-                <KEY NAME="instanceid_fk" TYPE="foreign" FIELDS="instanceid" REFERENCES="block_instances(id)" COMMENT="Foreign key to link block instance" />
+                <KEY NAME="instanceid_fk" TYPE="foreign" FIELDS="instanceid" REFERENCES="block_instances(id)" COMMENT="Foreign key to block instance" />
             </KEYS>
         </TABLE>
     </TABLES>

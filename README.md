@@ -53,31 +53,25 @@ Deploy your AI tutor in two ways:
 
 ---
 
-## Installation  
+## Installation
 
-The **Alphabees Moodle Plugin** can be installed in three ways:  
+The **Alphabees Moodle Plugin** can be installed in two ways:
 
-### **1. Installation via Moodle Plugin Directory (Recommended)**  
-1. Log in to your Moodle site as an administrator.  
-2. Go to **Site Administration > Plugins > Install Plugins**.  
-3. Search for *"Alphabees Moodle Plugin"* in the Plugin Directory.  
-4. Click **Install now** to download and install the plugin.  
-5. Follow the on-screen prompts to complete the installation.  
-6. Navigate to **Site Administration > Plugins > Blocks > Alphabees** to configure the plugin.  
+## **1. Installation via Moodle Plugin Directory (Recommended)**
+1. Log in to your Moodle site as an administrator.
+2. Go to **Site Administration > Plugins > Install Plugins**.
+3. Search for *"Alphabees"* in the Plugin Directory.
+4. Click **Install now** to download and install the plugin.
+5. Follow the on-screen prompts to complete the installation.
+6. Navigate to **Site Administration > Plugins > Blocks > Alphabees** to configure the plugin.
 
-### **2. Installation via Moodle's Built-in Plugin Installer (ZIP file)**  
-1. Download the plugin ZIP file from the [Alphabees GitHub Repository](https://github.com/LErdweg/moodle-block_alphabees).  
-2. Go to **Site Administration > Plugins > Install Plugins** in your Moodle site.  
-3. Upload the ZIP file and click **Install plugin**.  
-4. Follow the on-screen prompts to finalize the installation.  
-5. Navigate to **Site Administration > Plugins > Blocks > Alphabees** to configure the plugin.  
-
-### **3. Manual Installation**  
-1. Download the plugin ZIP file and extract its contents.  
-2. Copy the `alphabees` folder into the `/blocks/` directory of your Moodle installation.  
-3. Log in to your Moodle admin interface and navigate to **Site Administration > Notifications**.  
-4. Follow the on-screen prompts to complete the installation.  
-5. Navigate to **Site Administration > Plugins > Blocks > Alphabees** to configure the plugin.  
+## **2. Installation via Moodle's Built-in Plugin Installer (ZIP File)**
+1. Download the latest plugin ZIP file from the repository: [Alphabees Moodle Plugin ZIP](./releases/moodle-block_alphabees.zip).
+2. Log in to your Moodle site as an administrator.
+3. Go to **Site Administration > Plugins > Install Plugins**.
+4. Upload the ZIP file and click **Install plugin**.
+5. Follow the on-screen prompts to finalize the installation.
+6. Navigate to **Site Administration > Plugins > Blocks > Alphabees** to configure the plugin.
 
 ---
 

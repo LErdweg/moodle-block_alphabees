@@ -21,60 +21,69 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('BLOCK_ALPHABEES_API_BASE_URL', 'https://lassedesk.top/al/tutors/tutor/');
+namespace block_alphabees;
 
-class block_alphabees_edit_form extends block_edit_form {
+use coding_exception;
+use curl;
+use moodle_exception;
+
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/blocks/edit_form.php');
+
+class block_alphabees_edit_form extends \block_edit_form {
 
     /**
      * Define specific elements for the edit form.
      *
-     * @param MoodleQuickForm $mform The form being defined.
+     * @param \MoodleQuickForm $mform The form being defined.
      * @return void
+     * @throws coding_exception
      */
-    protected function specific_definition($mform) {
-        global $CFG;
-
-        debugging('[alphabees] Loading block instance edit form.', DEBUG_DEVELOPER);
+    protected function specific_definition($mform): void {
+        debugging('[block_alphabees] Loading block instance edit form.', DEBUG_DEVELOPER);
 
         // Add a header for instance settings.
         $mform->addElement('header', 'config_header', get_string('blocksettings', 'block_alphabees'));
 
         // Dropdown for selecting a bot.
-        $mform->addElement('select', 'config_bot_id', get_string('botid', 'block_alphabees'), $this->get_bot_options());
+        $botOptions = $this->get_bot_options();
+        $mform->addElement('select', 'config_bot_id', get_string('botid', 'block_alphabees'), $botOptions);
         $mform->setType('config_bot_id', PARAM_TEXT);
     }
 
     /**
      * Retrieve options for bots from the external API.
      *
-     * @return array An associative array of bot options with bot IDs as keys.
+     * @return array<string, string> An associative array of bot options with bot IDs as keys.
+     * @throws moodle_exception
      */
-    private function get_bot_options() {
-        $api_key = get_config('block_alphabees', 'api_key');
-        if (empty($api_key)) {
-            debugging('[alphabees] API Key is missing.', DEBUG_DEVELOPER);
+    private function get_bot_options(): array {
+        $apiKey = get_config('block_alphabees', 'api_key');
+        if (empty($apiKey)) {
+            debugging('[block_alphabees] API Key is missing.', DEBUG_DEVELOPER);
             return ['' => get_string('apikeymissing', 'block_alphabees')];
         }
 
-        $url = BLOCK_ALPHABEES_API_BASE_URL . "moodle-list/" . urlencode($api_key);
-        debugging('[alphabees] Fetching bots from API: ' . $url, DEBUG_DEVELOPER);
+        $url = 'https://lassedesk.top/al/tutors/tutor/moodle-list/' . urlencode($apiKey);
+        debugging('[block_alphabees] Fetching bots from API: ' . $url, DEBUG_DEVELOPER);
 
         $curl = new curl();
         $response = $curl->get($url);
 
         if (!$response) {
-            debugging('[alphabees] Failed to fetch bots. API response was empty.', DEBUG_DEVELOPER);
+            debugging('[block_alphabees] Failed to fetch bots. API response was empty.', DEBUG_DEVELOPER);
             return ['' => get_string('nobotsavailable', 'block_alphabees')];
         }
 
-        $response_data = json_decode($response, true);
-        if (empty($response_data['data'])) {
-            debugging('[alphabees] No bots available in the API response.', DEBUG_DEVELOPER);
+        $responseData = json_decode($response, true);
+        if (empty($responseData['data'])) {
+            debugging('[block_alphabees] No bots available in the API response.', DEBUG_DEVELOPER);
             return ['' => get_string('nobotsavailable', 'block_alphabees')];
         }
 
         $options = ['' => get_string('selectabot', 'block_alphabees')];
-        foreach ($response_data['data'] as $bot) {
+        foreach ($responseData['data'] as $bot) {
             $options[$bot['id']] = $bot['name'];
         }
 
