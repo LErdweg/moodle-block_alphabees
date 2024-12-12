@@ -14,7 +14,7 @@
 // along with Moodle. If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * English strings for Alphabees block.
+ * Capability definitions for the Alphabees AI Tutor block.
  *
  * @package   block_alphabees
  * @copyright 2024 Alphabees
@@ -23,12 +23,26 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'Alphabees AI Tutor';
-$string['apikey'] = 'API Key';
-$string['apikey_desc'] = 'Enter the API key to access the Alphabees service.';
-$string['blocksettings'] = 'Block settings';
-$string['apikeymissing'] = 'API key is missing. Please configure the plugin settings.';
-$string['nobotsavailable'] = 'No AI tutors available.';
-$string['selectabot'] = 'Select an AI tutor';
-$string['botid'] = 'AI tutor ID';
-$string['nobotselected'] = 'No AI tutor has been selected.';
+// Define capabilities for the plugin.
+$capabilities = [
+    // Capability to add the block to a course or site-wide.
+    'block/alphabees:addinstance' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/site:manageblocks',
+    ],
+
+    // Capability to add the block to a user's dashboard (My page).
+    'block/alphabees:myaddinstance' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'user' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/my:manageblocks',
+    ],
+];
