@@ -87,10 +87,12 @@ For more detailed instructions, visit the [Installation Wiki](https://github.com
 ![Show Chat Widget](assets/open_chat_widget_005.png)
 
 3. Add the Alphabees block to specific courses or pages in Moodle.  
-![Add Block Alphabees AI Tutor](assets/add_block_Alphabees_AI_Tutor_002.png)
+![Add Block Alphabees AI Tutor](assets/add_block_Alphabees.png)
 
 4. Use the block settings to select the desired AI tutor from the dropdown list.  
 ![Configure Block Instance](assets/configure_block_instance_003.png)
+
+![Select AI Tutor from dropdown](assets/select_ai_tutor_004.png)
 
 ## Customizations
 1. Change size of chat window.
