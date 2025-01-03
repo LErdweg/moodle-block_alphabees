@@ -17,7 +17,7 @@
  * Settings for the Alphabees AI Tutor block.
  *
  * @package   block_alphabees
- * @copyright 2024 Alphabees
+ * @copyright 2025 Alphabees
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

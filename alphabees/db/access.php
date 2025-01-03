@@ -17,16 +17,15 @@
  * Capability definitions for the Alphabees AI Tutor block.
  *
  * @package   block_alphabees
- * @copyright 2024 Alphabees
+ * @copyright 2025 Alphabees
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-// Define capabilities for the plugin.
 $capabilities = [
-    // Capability to add the block to a course or site-wide.
     'block/alphabees:addinstance' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
         'archetypes' => [
@@ -36,10 +35,9 @@ $capabilities = [
         'clonepermissionsfrom' => 'moodle/site:manageblocks',
     ],
 
-    // Capability to add the block to a user's dashboard (My page).
     'block/alphabees:myaddinstance' => [
         'captype' => 'write',
-        'contextlevel' => CONTEXT_BLOCK,
+        'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'user' => CAP_ALLOW,
         ],

@@ -17,7 +17,7 @@
  * Block definition for Alphabees AI Tutor block.
  *
  * @package   block_alphabees
- * @copyright 2024 Alphabees
+ * @copyright 2025 Alphabees
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -38,7 +38,7 @@ class block_alphabees extends block_base {
      */
     public function init(): void {
         $this->title = get_string('pluginname', 'block_alphabees');
-        debugging('[block_alphabees] Initializing block.', DEBUG_DEVELOPER);
+        //debugging('[block_alphabees] Initializing block.', DEBUG_DEVELOPER);
     }
 
     /**
@@ -68,19 +68,25 @@ class block_alphabees extends block_base {
         return true;
     }
 
+    public function applicable_formats() {
+        return array('all' => true);
+    }
+    
     /**
      * Generate the block content.
      *
      * @return stdClass|null The content object or null.
      * @throws coding_exception
      */
+
     public function get_content(): ?stdClass {
+        global $PAGE, $OUTPUT;
+
         if ($this->content !== null) {
             return $this->content;
         }
 
-        debugging('[block_alphabees] Rendering block content.', DEBUG_DEVELOPER);
-
+        // Fetch API key and bot ID
         $apikey = get_config('block_alphabees', 'apikey');
         if (empty($apikey)) {
             $this->content = new stdClass();
@@ -88,7 +94,7 @@ class block_alphabees extends block_base {
             return $this->content;
         }
 
-        $botid = $this->config->botid?? null;
+        $botid = $this->config->botid ?? null;
         if (empty($botid)) {
             $this->content = new stdClass();
             $this->content->text = get_string('nobotselected', 'block_alphabees');
@@ -96,9 +102,48 @@ class block_alphabees extends block_base {
         }
 
         $primarycolor = $this->fetch_primary_color($apikey, $botid);
+        $apikey_escaped = htmlspecialchars(s($apikey), ENT_QUOTES, 'UTF-8');
+        $botid_escaped = htmlspecialchars(s($botid), ENT_QUOTES, 'UTF-8');
+        $primarycolor_escaped = htmlspecialchars(s($primarycolor), ENT_QUOTES, 'UTF-8');
+        $scripturl = 'https://dn1t41q06556o.cloudfront.net/production/chat-widget.js';
 
+        // Load external script via Moodle's system
+        $PAGE->requires->js(new moodle_url($scripturl), true);
+
+        // Inline JavaScript for widget initialization
+        $init_script = <<<JS
+        window.alphabeesChatInitialized = window.alphabeesChatInitialized || false;
+
+        function initAlChat() {
+            if (window.alphabeesChatInitialized) {
+                console.warn("Chat widget already initialized.");
+                return;
+            }
+
+            if (typeof _loadAlChat === "function") {
+                _loadAlChat({
+                    apiKey: "{$apikey_escaped}",
+                    botId: "{$botid_escaped}",
+                    primaryColor: "{$primarycolor_escaped}",
+                    development: true
+                });
+                window.alphabeesChatInitialized = true; 
+            } else {
+                console.error("Chat widget script not ready. Retrying...");
+                setTimeout(initAlChat, 500); 
+            }
+        }
+
+        // Use window.onload to ensure all scripts are fully loaded
+        window.onload = initAlChat;
+        JS;
+
+        // Add inline script to Moodle's page
+        $PAGE->requires->js_amd_inline($init_script);
+
+        // Prepare block content
         $this->content = new stdClass();
-        $this->content->text = $this->generate_chat_widget_script($apikey, $botid, $primarycolor);
+        $this->content->text = '';
 
         return $this->content;
     }
@@ -117,7 +162,7 @@ class block_alphabees extends block_base {
 
         if (!$response) {
             debugging('[block_alphabees] Failed to fetch primary color. Using fallback.', DEBUG_DEVELOPER);
-            return '#72AECF'; // Fallback color.
+            return '#72AECF'; 
         }
 
         $responseData = json_decode($response, true);
@@ -134,37 +179,6 @@ class block_alphabees extends block_base {
         }
 
         debugging('[block_alphabees] Primary color not found in response. Using fallback.', DEBUG_DEVELOPER);
-        return '#72AECF'; // Fallback color.
-    }
-
-    /**
-     * Generate the chat widget JavaScript snippet.
-     *
-     * @param string $apikey The API key.
-     * @param string $botid The bot ID.
-     * @param string $primarycolor The primary color for the chat widget.
-     * @return string The JavaScript snippet.
-     */
-    private function generate_chat_widget_script(string $apikey, string $botid, string $primarycolor): string {
-        $escapedapikey = htmlspecialchars($apikey, ENT_QUOTES, 'UTF-8');
-        $escapedbotid = htmlspecialchars($botid, ENT_QUOTES, 'UTF-8');
-        $escapedprimarycolor = htmlspecialchars($primarycolor, ENT_QUOTES, 'UTF-8');
-
-        return "
-        <script>
-            var e = document,
-                t = e.createElement('script');
-            t.src = 'https://dn1t41q06556o.cloudfront.net/development/chat-widget.js';
-            t.onload = function() {
-                _loadAlChat({
-                    apiKey: '{$escapedapikey}',
-                    botId: '{$escapedbotid}',
-                    primaryColor: '{$escapedprimarycolor}',
-                    development: true
-                });
-            };
-            e.body.appendChild(t);
-        </script>
-        ";
+        return '#72AECF'; 
     }
 }

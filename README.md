@@ -80,11 +80,24 @@ For more detailed instructions, visit the [Installation Wiki](https://github.com
 ---
 
 ## Configuration  
-
 1. Enter your API key from the Alphabees portal in the plugin settings.  
-2. Customize the chat widget appearance through the Alphabees portal, including colors, fonts, logos, and placement.  
+![Enter API-KEY](assets/enter_apikey_001.png)
+
+2. Customize the chat widget appearance through the Alphabees portal, including colors, fonts, logos, and placement.
+![Show Chat Widget](assets/open_chat_widget_005.png)
+
 3. Add the Alphabees block to specific courses or pages in Moodle.  
+![Add Block Alphabees AI Tutor](assets/add_block_Alphabees_AI_Tutor_002.png)
+
 4. Use the block settings to select the desired AI tutor from the dropdown list.  
+![Configure Block Instance](assets/configure_block_instance_003.png)
+
+## Customizations
+1. Change size of chat window.
+![Edit Window Size](assets/edit_window_size_006.png)
+
+2. Change position of chat window.
+![Edit Window Size](assets/move_chat_window_007.png)
 
 ---
 
