@@ -124,8 +124,7 @@ class block_alphabees extends block_base {
                 _loadAlChat({
                     apiKey: "{$apikey_escaped}",
                     botId: "{$botid_escaped}",
-                    primaryColor: "{$primarycolor_escaped}",
-                    development: true
+                    primaryColor: "{$primarycolor_escaped}"
                 });
                 window.alphabeesChatInitialized = true; 
             } else {

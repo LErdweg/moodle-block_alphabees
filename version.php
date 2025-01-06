@@ -30,7 +30,7 @@ $plugin->component = 'block_alphabees';
 $plugin->version = 2023100500;
 
 // Minimum Moodle version required for this plugin.
-$plugin->requires = 2024090200; // Moodle 4.4.3
+$plugin->requires = 2022041900; 
 
 // Maturity level of the plugin: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, or MATURITY_STABLE.
 $plugin->maturity = MATURITY_STABLE;
