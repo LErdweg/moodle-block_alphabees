@@ -140,6 +140,12 @@ This plugin complies with Moodle's privacy policies. It does not store personal 
 
 This plugin is licensed under the GNU General Public License v3.0. For more details, see the `LICENSE` file included in the repository.  
 
+## Proprietary Components
+
+The Alphabees Chat Widget is a proprietary, externally hosted JavaScript file dynamically loaded into Moodle via this plugin.
+To ensure consistency and efficiency, the widget is centrally managed and versioned on our servers. This approach reduces maintenance overhead across plugins for different LMS platforms, enabling seamless updates and a consistent user experience.
+As part of our business model, the chat widget generates revenue to finance ongoing operations and development. For this reason, it is not open-source, though the Moodle plugin code remains fully open-source and compliant with Moodle's development standards.
+
 ---
 
 ## Support  

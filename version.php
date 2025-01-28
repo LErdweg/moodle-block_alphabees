@@ -1,5 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -7,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Version details for the Alphabees AI Tutor block plugin.
@@ -30,7 +31,7 @@ $plugin->component = 'block_alphabees';
 $plugin->version = 2023100500;
 
 // Minimum Moodle version required for this plugin.
-$plugin->requires = 2022041900; 
+$plugin->requires = 2022041900;
 
 // Maturity level of the plugin: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, or MATURITY_STABLE.
 $plugin->maturity = MATURITY_STABLE;

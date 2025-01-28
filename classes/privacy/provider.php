@@ -15,23 +15,28 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * German strings for Alphabees block.
+ * Privacy API implementation for the Alphabees block.
  *
  * @package   block_alphabees
  * @copyright 2025 Alphabees
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_alphabees\privacy;
 
-$string['apikey'] = 'API Key';
-$string['apikey_desc'] = 'Geben Sie den API Key ein, um auf den Alphabees-Dienst zuzugreifen.';
-$string['apikeymissing'] = 'API Key fehlt. Bitte konfigurieren Sie die Plug-in-Einstellungen.';
-$string['blocksettings'] = 'Blockeinstellungen';
-$string['botid'] = 'KI-Tutor-ID';
-$string['nobotsavailable'] = 'Keine KI-Tutoren verfügbar.';
-$string['nobotselected'] = 'Es wurde kein KI-Tutor ausgewählt.';
-$string['pluginname'] = 'Alphabees KI Tutor';
-$string['privacy:metadata'] = 'Der Alphabees-Block speichert keine persönlichen Daten.';
-$string['selectabot'] = 'Wählen Sie einen KI-Tutor aus';
+/**
+ * Privacy provider for block_alphabees.
+ *
+ * This block does not store any personal user data.
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
 
+    /**
+     * Get the reason why this plugin stores no data.
+     *
+     * @return string
+     */
+    public static function get_reason(): string {
+        return get_string('privacy:metadata', 'block_alphabees');
+    }
+}

@@ -1,5 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -7,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Block definition for Alphabees AI Tutor block.
@@ -20,8 +21,6 @@
  * @copyright 2025 Alphabees
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class block_alphabees
@@ -38,7 +37,6 @@ class block_alphabees extends block_base {
      */
     public function init(): void {
         $this->title = get_string('pluginname', 'block_alphabees');
-        //debugging('[block_alphabees] Initializing block.', DEBUG_DEVELOPER);
     }
 
     /**
@@ -68,33 +66,42 @@ class block_alphabees extends block_base {
         return true;
     }
 
-    public function applicable_formats() {
-        return array('all' => true);
+    /**
+     * Define where this block can be added.
+     *
+     * @return array Applicable formats.
+     */
+    public function applicable_formats(): array {
+        return ['all' => true];
     }
-    
+
     /**
      * Generate the block content.
      *
-     * @return stdClass|null The content object or null.
-     * @throws coding_exception
+     * This function prepares the content for the block, including loading
+     * the required JavaScript and validating the API key and bot ID.
+     *
+     * @return stdClass|null The content object or null if already set.
+     * @throws coding_exception If any required configuration is missing.
      */
-
     public function get_content(): ?stdClass {
-        global $PAGE, $OUTPUT;
-
         if ($this->content !== null) {
             return $this->content;
         }
 
-        // Fetch API key and bot ID
-        $apikey = get_config('block_alphabees', 'apikey');
+        // Ensure the user is logged in.
+        require_login();
+
+        // Fetch API key securely.
+        $apikey = clean_param(get_config('block_alphabees', 'apikey'), PARAM_TEXT);
         if (empty($apikey)) {
             $this->content = new stdClass();
             $this->content->text = get_string('apikeymissing', 'block_alphabees');
             return $this->content;
         }
 
-        $botid = $this->config->botid ?? null;
+        // Fetch bot ID securely.
+        $botid = isset($this->config->botid) ? clean_param($this->config->botid, PARAM_TEXT) : null;
         if (empty($botid)) {
             $this->content = new stdClass();
             $this->content->text = get_string('nobotselected', 'block_alphabees');
@@ -102,51 +109,23 @@ class block_alphabees extends block_base {
         }
 
         $primarycolor = $this->fetch_primary_color($apikey, $botid);
-        $apikey_escaped = htmlspecialchars(s($apikey), ENT_QUOTES, 'UTF-8');
-        $botid_escaped = htmlspecialchars(s($botid), ENT_QUOTES, 'UTF-8');
-        $primarycolor_escaped = htmlspecialchars(s($primarycolor), ENT_QUOTES, 'UTF-8');
-        $scripturl = 'https://dn1t41q06556o.cloudfront.net/production/chat-widget.js';
 
-        // Load external script via Moodle's system
-        $PAGE->requires->js(new moodle_url($scripturl), true);
+        // Use Moodle's AMD module to load the chat widget.
+        $this->page->requires->js_call_amd(
+            'block_alphabees/chat_widget',
+            'init',
+            [
+                htmlspecialchars($apikey, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars($botid, ENT_QUOTES, 'UTF-8'),
+                htmlspecialchars($primarycolor, ENT_QUOTES, 'UTF-8'),
+            ]
+        );
 
-        // Inline JavaScript for widget initialization
-        $init_script = <<<JS
-        window.alphabeesChatInitialized = window.alphabeesChatInitialized || false;
-
-        function initAlChat() {
-            if (window.alphabeesChatInitialized) {
-                console.warn("Chat widget already initialized.");
-                return;
-            }
-
-            if (typeof _loadAlChat === "function") {
-                _loadAlChat({
-                    apiKey: "{$apikey_escaped}",
-                    botId: "{$botid_escaped}",
-                    primaryColor: "{$primarycolor_escaped}"
-                });
-                window.alphabeesChatInitialized = true; 
-            } else {
-                console.error("Chat widget script not ready. Retrying...");
-                setTimeout(initAlChat, 500); 
-            }
-        }
-
-        // Use window.onload to ensure all scripts are fully loaded
-        window.onload = initAlChat;
-        JS;
-
-        // Add inline script to Moodle's page
-        $PAGE->requires->js_amd_inline($init_script);
-
-        // Prepare block content
+        // Create and return the content object.
         $this->content = new stdClass();
         $this->content->text = '';
-
         return $this->content;
     }
-
     /**
      * Fetch the primary color for the selected bot.
      *
@@ -155,29 +134,32 @@ class block_alphabees extends block_base {
      * @return string The primary color, or a fallback color if unavailable.
      */
     private function fetch_primary_color(string $apikey, string $botid): string {
-        $url = 'https://lassedesk.top/al/tutors/tutor/moodle-list/' . urlencode($apikey);
-        $curl = new curl();
+        $apikey = clean_param($apikey, PARAM_TEXT);
+        $botid = clean_param($botid, PARAM_TEXT);
+
+        $url = 'https://api.alphabees.de/al/tutors/tutor/moodle-list/' . urlencode($apikey);
+        $curl = new curl(['timeout' => 10]);
         $response = $curl->get($url);
 
         if (!$response) {
             debugging('[block_alphabees] Failed to fetch primary color. Using fallback.', DEBUG_DEVELOPER);
-            return '#72AECF'; 
+            return '#72AECF';
         }
 
-        $responseData = json_decode($response, true);
+        $responsedata = json_decode($response, true);
 
-        if (!empty($responseData['data'])) {
-            foreach ($responseData['data'] as $bot) {
-                // Decode primaryColor and convert to lowercase for internal use.
-                if ($bot['id'] === $botid && !empty($bot['primaryColor'])) {
-                    $primarycolor = strtolower($bot['primaryColor']);
-                    debugging("[block_alphabees] Found primary color: {$primarycolor} for bot ID: {$botid}", DEBUG_DEVELOPER);
-                    return $primarycolor;
-                }
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            debugging('[block_alphabees] JSON decode error while fetching primary color.', DEBUG_DEVELOPER);
+            return '#72AECF';
+        }
+
+        foreach ($responsedata['data'] ?? [] as $bot) {
+            if (isset($bot['id'], $bot['primaryColor']) && $bot['id'] === $botid) {
+                return strtolower(clean_param($bot['primaryColor'], PARAM_TEXT));
             }
         }
 
-        debugging('[block_alphabees] Primary color not found in response. Using fallback.', DEBUG_DEVELOPER);
-        return '#72AECF'; 
+        debugging('[block_alphabees] Primary color not found. Using fallback.', DEBUG_DEVELOPER);
+        return '#72AECF';
     }
 }

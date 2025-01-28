@@ -1,5 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
+//
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -7,11 +8,11 @@
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * Edit form for block_alphabees instances.
@@ -46,8 +47,8 @@ class block_alphabees_edit_form extends block_edit_form {
         $mform->addElement('header', 'config_header', get_string('blocksettings', 'block_alphabees'));
 
         // Dropdown for selecting a bot.
-        $botOptions = $this->get_bot_options();
-        $mform->addElement('select', 'config_botid', get_string('botid', 'block_alphabees'), $botOptions);
+        $botoptions = $this->get_bot_options();
+        $mform->addElement('select', 'config_botid', get_string('botid', 'block_alphabees'), $botoptions);
         $mform->setType('config_botid', PARAM_TEXT);
     }
 
@@ -64,10 +65,13 @@ class block_alphabees_edit_form extends block_edit_form {
             return ['' => get_string('apikeymissing', 'block_alphabees')];
         }
 
-        $url = 'https://lassedesk.top/al/tutors/tutor/moodle-list/' . urlencode($apikey);
+        // Sanitize API key.
+        $apikey = clean_param($apikey, PARAM_TEXT);
+
+        $url = 'https://api.alphabees.de/al/tutors/tutor/moodle-list/' . urlencode($apikey);
         debugging('[block_alphabees] Fetching bots from API: ' . $url, DEBUG_DEVELOPER);
 
-        $curl = new curl();
+        $curl = new curl(['timeout' => 10]);
         $response = $curl->get($url);
 
         if (!$response) {
@@ -75,15 +79,19 @@ class block_alphabees_edit_form extends block_edit_form {
             return ['' => get_string('nobotsavailable', 'block_alphabees')];
         }
 
-        $responseData = json_decode($response, true);
-        if (empty($responseData['data'])) {
-            debugging('[block_alphabees] No bots available in the API response.', DEBUG_DEVELOPER);
+        // Decode the response safely.
+        $responsedata = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            debugging('[block_alphabees] Failed to decode JSON response.', DEBUG_DEVELOPER);
             return ['' => get_string('nobotsavailable', 'block_alphabees')];
         }
 
+        // Prepare bot options.
         $options = ['' => get_string('selectabot', 'block_alphabees')];
-        foreach ($responseData['data'] as $bot) {
-            $options[$bot['id']] = $bot['name'];
+        foreach ($responsedata['data'] ?? [] as $bot) {
+            if (isset($bot['id'], $bot['name'])) {
+                $options[clean_param($bot['id'], PARAM_TEXT)] = clean_param($bot['name'], PARAM_TEXT);
+            }
         }
 
         return $options;
