@@ -1,46 +1,60 @@
 /**
- * Grunt configuration for building the Alphabees Chat Widget AMD module.
+ * Grunt configuration for building Alphabees AMD modules.
  *
  * @package   block_alphabees
  */
-
 module.exports = function (grunt) {
     grunt.initConfig({
         requirejs: {
-            compile: {
+            chatwidget: {
                 options: {
-                    // Directory where your AMD "src" files live.
+                    // Folder where your .js files reside.
                     baseUrl: 'amd/src',
 
-                    // Name of the module to optimize. This matches the filename (without .js).
-                    // Moodle automatically identifies 'chat_widget.js' as 'block_alphabees/chat_widget'.
+                    // Main AMD module to bundle. This should match the module's `define` name minus .js
                     name: 'chat_widget',
 
-                    // Where to place the optimized file.
+                    // The output file after optimization.
                     out: 'amd/build/chat_widget.min.js',
 
-                    // No external dependencies to bundle.
+                    // Mark external modules as empty if you don't want them inlined.
+                    // If your chat_widget depends on config, either exclude it or rename paths as needed.
                     paths: {
-                        'block_alphabees/config': 'config',
-                        'al-chat-widget': 'empty:' 
+                        // Because the module references define(['block_alphabees/config', 'al-chat-widget']), 
+                        // you can decide to treat them as empty or exclude them. 
+                        'block_alphabees/config': 'empty:',  // Tells r.js "don't inline config code here"
+                        'al-chat-widget': 'empty:'
                     },
 
-                    // You can choose 'none' if you want unminified output or 'uglify2' for minified.
+                    // Another approach: exclude the config so it’s not inlined:
+                    exclude: ['block_alphabees/config'],
+
+                    // Minify.
                     optimize: 'uglify2',
-
-                    // Don’t preserve license comments in the minified output.
                     preserveLicenseComments: false,
-
-                    // Turn off source maps if not needed. Set to true if you do want them.
+                    generateSourceMaps: false
+                }
+            },
+            configjs: {
+                options: {
+                    baseUrl: 'amd/src',
+                    name: 'config',
+                    out: 'amd/build/config.min.js',
+                    optimize: 'uglify2',
+                    preserveLicenseComments: false,
                     generateSourceMaps: false
                 }
             }
         }
     });
 
+    // Load the 'requirejs' plugin.
     grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    // The default task will run the RequireJS optimizer.
-    grunt.registerTask('default', ['requirejs']);
-    grunt.registerTask('amd', ['requirejs']);
+    // Register explicit tasks.
+    grunt.registerTask('build_chatwidget', ['requirejs:chatwidget']);
+    grunt.registerTask('build_configjs', ['requirejs:configjs']);
+
+    // Default: build both.
+    grunt.registerTask('default', ['build_chatwidget', 'build_configjs']);
 };

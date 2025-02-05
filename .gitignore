@@ -1,3 +1,5 @@
 .env
 archive
 alphabees
+package-lock.json
+package.json

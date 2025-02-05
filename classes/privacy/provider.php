@@ -24,15 +24,37 @@
 
 namespace block_alphabees\privacy;
 
+use core_privacy\local\metadata\collection;
+
 /**
  * Privacy provider for block_alphabees.
  *
- * This block does not store any personal user data.
+ * This block does not store any personal user data in Moodle but communicates with the Alphabees backend.
  */
-class provider implements \core_privacy\local\metadata\null_provider {
+class provider implements \core_privacy\local\metadata\provider {
 
     /**
-     * Get the reason why this plugin stores no data.
+     * Declare external data communication.
+     *
+     * @param collection $collection The metadata collection to update.
+     * @return collection The updated metadata collection.
+     */
+    public static function get_metadata(collection $collection): collection {
+        $collection->add_external_location_link(
+            'alphabees_backend',
+            [
+                'api_key' => 'The API key provided by the user to authenticate with the Alphabees backend.',
+                'bot_list_request' => 'Retrieves the list of AI tutors configured by the user in the Alphabees platform.',
+                'chat_messages' => 'Messages sent by the user are processed temporarily during an active session for AI-based responses. These messages are not stored after the session ends.',
+            ],
+            'The Alphabees plugin exchanges API keys and retrieves AI tutors from the Alphabees backend. User messages are processed in-session but are not stored permanently.'
+        );
+
+        return $collection;
+    }
+
+    /**
+     * Get the reason why this plugin stores no personal user data.
      *
      * @return string
      */

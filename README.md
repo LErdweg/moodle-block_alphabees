@@ -79,7 +79,10 @@ For more detailed instructions, visit the [Installation Wiki](https://github.com
 
 ---
 
-## Configuration  
+## Configuration
+0. Register a free or paid Account on portal.alphabees.de and retrieve your API key
+![Retrieve API-KEY](assets/retrieve_api-key_000.png.png)
+
 1. Enter your API key from the Alphabees portal in the plugin settings.  
 ![Enter API-KEY](assets/enter_apikey_001.png)
 
@@ -105,12 +108,29 @@ For more detailed instructions, visit the [Installation Wiki](https://github.com
 
 ## Free and Paid Plans  
 
-- **Free Tier**:  
-  - Includes 3 file uploads.  
-  - Limited AI tutor interaction quota.  
-- **Paid Plan**:  
-  - Offers enhanced functionality and higher quotas.  
-  - Available for €99 per month.  
+### 1. Free Plan (Ideal for small teams & individuals)
+- 1 AI Tutor**
+- 30 conversations per month**
+- 3 data sources**
+- Basic Q&A AI Tutor**
+- Access to the admin portal**
+- Cost: €0 (Free Forever)**
+
+### 2. Basic Plan (€99/month)
+- 5 AI Tutors**
+- 2,000 conversations per month**
+- 50 data sources**
+- Custom chat design with branding**
+- Email support**
+
+### 3. Professional Plan (€249/month)
+- 20 AI Tutors**
+- 5,000 conversations per month**
+- 50 data sources**
+- Custom chat design without branding**
+- Email support**
+
+For enterprise pricing, please contact us directly via the Alphabees portal. 
 
 ---
 

@@ -29,9 +29,12 @@ $string['apikey_desc'] = 'Geben Sie den API Key ein, um auf den Alphabees-Dienst
 $string['apikeymissing'] = 'API Key fehlt. Bitte konfigurieren Sie die Plug-in-Einstellungen.';
 $string['blocksettings'] = 'Blockeinstellungen';
 $string['botid'] = 'KI-Tutor-ID';
+$string['generalsettings'] = 'Allgemeine Einstellungen';
+$string['generalsettings_desc'] = 'Konfigurieren Sie die allgemeinen Einstellungen für das Alphabees-Plugin.';
 $string['nobotsavailable'] = 'Keine KI-Tutoren verfügbar.';
 $string['nobotselected'] = 'Es wurde kein KI-Tutor ausgewählt.';
 $string['pluginname'] = 'Alphabees KI Tutor';
-$string['privacy:metadata'] = 'Der Alphabees-Block speichert keine persönlichen Daten.';
+$string['privacy:metadata'] = 'Der Alphabees-Block speichert keine persönlichen Daten, kommuniziert jedoch mit dem Alphabees-Backend.';
+$string['privacy:metadata:alphabees_backend'] = 'Das Alphabees-Plugin kommuniziert mit einem externen KI-Dienst, um API-Schlüssel auszutauschen und konfigurierte KI-Tutoren abzurufen. Benutzernachrichten werden während einer aktiven Sitzung verarbeitet, aber nicht dauerhaft gespeichert.';
 $string['selectabot'] = 'Wählen Sie einen KI-Tutor aus';
 
