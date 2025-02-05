@@ -81,7 +81,7 @@ For more detailed instructions, visit the [Installation Wiki](https://github.com
 
 ## Configuration
 0. Register a free or paid Account on portal.alphabees.de and retrieve your API key
-![Retrieve API-KEY](assets/retrieve_api-key_000.png.png)
+![Retrieve API-KEY](assets/retrieve_api-key_000.png)
 
 1. Enter your API key from the Alphabees portal in the plugin settings.  
 ![Enter API-KEY](assets/enter_apikey_001.png)
