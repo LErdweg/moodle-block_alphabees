@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+$string['alphabees:addinstance'] = 'Add a new Alphabees AI Tutor block';
+$string['alphabees:myaddinstance'] = 'Add a new Alphabees AI Tutor block to My Moodle page';
+$string['alphabees:view'] = 'View Alphabees AI Tutor block';
 $string['apikey'] = 'API Key';
 $string['apikey_desc'] = 'Enter the API key to access the Alphabees service.';
 $string['apikeymissing'] = 'API key is missing. Please configure the plugin settings.';
@@ -35,5 +38,4 @@ $string['nobotsavailable'] = 'No AI tutors available.';
 $string['nobotselected'] = 'No AI tutor has been selected.';
 $string['pluginname'] = 'Alphabees AI Tutor';
 $string['privacy:metadata'] = 'The Alphabees block does not store personal data but interacts with the Alphabees backend.';
-$string['privacy:metadata:alphabees_backend'] = 'The Alphabees plugin communicates with an external AI service to exchange API keys and retrieve configured AI tutors. User messages are processed in-session for AI responses but are not stored permanently.';
 $string['selectabot'] = 'Select an AI tutor';
