@@ -117,16 +117,18 @@ For more detailed instructions, visit the [Installation Wiki](https://github.com
 - Cost: €0 (Free Forever)**
 
 ### 2. Basic Plan (€99/month)
-- 5 AI Tutors**
+- 20 AI Tutors**
 - 2,000 conversations per month**
-- 50 data sources**
+- 100 data sources**
+- up to 100 learners
 - Custom chat design with branding**
 - Email support**
 
 ### 3. Professional Plan (€249/month)
-- 20 AI Tutors**
+- 50 AI Tutors**
 - 5,000 conversations per month**
-- 50 data sources**
+- 1,000 data sources**
+- up to 250 learners
 - Custom chat design without branding**
 - Email support**
 
