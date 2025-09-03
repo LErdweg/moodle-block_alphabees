@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details for the Alphabees AI Tutor block plugin.
+ * Settings for the Alphabees AI Tutor block.
  *
  * @package   block_alphabees
  * @copyright 2025 Alphabees
@@ -24,20 +24,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// The plugin's frankenstyle component name.
-$plugin->component = 'block_alphabees';
+if ($ADMIN->fulltree) {
+    // Add a heading for general settings.
+    $settings->add(new admin_setting_heading(
+        'block_alphabees/general_settings',
+        get_string('generalsettings', 'block_alphabees'),
+        get_string('generalsettings_desc', 'block_alphabees')
+    ));
 
-// The plugin version in YYYYMMDDXX format.
-$plugin->version = 2025072521;
-
-// Minimum Moodle version required for this plugin.
-$plugin->requires = 2022112800;
-
-// List of supported Moodle versions.
-$plugin->supported = [401, 500];
-
-// Maturity level of the plugin: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, or MATURITY_STABLE.
-$plugin->maturity = MATURITY_STABLE;
-
-// Human-readable version information.
-$plugin->release = '2.0.0';
+    // Add the API Key setting.
+    $settings->add(new admin_setting_configtext(
+        'block_alphabees/apikey', // The unique identifier for the setting.
+        get_string('apikey', 'block_alphabees'), // The setting's display name.
+        get_string('apikey_desc', 'block_alphabees'), // The description shown below the field.
+        clean_param('', PARAM_TEXT), // Default value sanitized.
+        PARAM_TEXT // Input validation: Text only.
+    ));
+}

@@ -15,29 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details for the Alphabees AI Tutor block plugin.
+ * Privacy API implementation for the Alphabees block.
  *
  * @package   block_alphabees
  * @copyright 2025 Alphabees
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_alphabees\privacy;
 
-// The plugin's frankenstyle component name.
-$plugin->component = 'block_alphabees';
+use core_privacy\local\metadata\null_provider;
 
-// The plugin version in YYYYMMDDXX format.
-$plugin->version = 2025072521;
+/**
+ * Privacy provider for block_alphabees.
+ *
+ * This block does not store any personal user data in Moodle but communicates with the Alphabees backend.
+ */
+class provider implements null_provider {
 
-// Minimum Moodle version required for this plugin.
-$plugin->requires = 2022112800;
-
-// List of supported Moodle versions.
-$plugin->supported = [401, 500];
-
-// Maturity level of the plugin: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, or MATURITY_STABLE.
-$plugin->maturity = MATURITY_STABLE;
-
-// Human-readable version information.
-$plugin->release = '2.0.0';
+    /**
+     * Get the reason why this plugin stores no personal user data.
+     *
+     * @return string A language string identifier.
+     */
+    public static function get_reason(): string {
+        return 'privacy:metadata';
+    }
+}

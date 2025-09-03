@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details for the Alphabees AI Tutor block plugin.
+ * Capability definitions for the Alphabees AI Tutor block.
  *
  * @package   block_alphabees
  * @copyright 2025 Alphabees
@@ -24,20 +24,24 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// The plugin's frankenstyle component name.
-$plugin->component = 'block_alphabees';
+$capabilities = [
+    'block/alphabees:addinstance' => [
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => [
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/site:manageblocks',
+    ],
 
-// The plugin version in YYYYMMDDXX format.
-$plugin->version = 2025072521;
-
-// Minimum Moodle version required for this plugin.
-$plugin->requires = 2022112800;
-
-// List of supported Moodle versions.
-$plugin->supported = [401, 500];
-
-// Maturity level of the plugin: MATURITY_ALPHA, MATURITY_BETA, MATURITY_RC, or MATURITY_STABLE.
-$plugin->maturity = MATURITY_STABLE;
-
-// Human-readable version information.
-$plugin->release = '2.0.0';
+    'block/alphabees:myaddinstance' => [
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'user' => CAP_ALLOW,
+        ],
+        'clonepermissionsfrom' => 'moodle/my:manageblocks',
+    ],
+];
